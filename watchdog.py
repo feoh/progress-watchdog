@@ -6,8 +6,8 @@ from playsound import playsound
 from pynput import keyboard
 
 # CONFIGURABLE SETTINGS
-WATCHDOG_KEY_COMBO = {keyboard.Key.ctrl_l, keyboard.Key.alt_l, keyboard.KeyCode(char="k")}
-WATCHDOG_TIMEOUT = 10  # Time in seconds before the notification sound plays
+WATCHDOG_KEY_COMBO = {keyboard.Key.ctrl_l, keyboard.Key.alt_l, keyboard.KeyCode(char=";")}
+WATCHDOG_TIMEOUT = 60 * 15  # Time in seconds before the notification sound plays
 WATCHDOG_ALERT_SOUND = "buzzer-or-wrong-answer-20582.mp3"  # Provide a valid sound file path
 
 # Shared variable to track the last key press time
