@@ -1,3 +1,5 @@
+["Cartoon Bulldog png sticker, animal"](https://www.rawpixel.com/image/6482398/png-sticker-public-domain) is marked with [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/?ref=openverse) ![CC](https://mirrors.creativecommons.org/presskit/icons/cc.svg) ![Zero](https://mirrors.creativecommons.org/presskit/icons/zero.svg).
+
 # Watchdog
 
 Watchdog: A program to help avoid analysis paralysis and time dilation due to tunnel vision.
