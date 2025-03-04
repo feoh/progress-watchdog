@@ -2,6 +2,8 @@ import keyboard
 import time
 import threading
 from playsound import playsound
+from loguru import logger
+
 
 # CONFIGURABLE SETTINGS
 WATCHDOG_KEY_COMBO = "ctrl+alt+k"  # Change this to the desired key combination
@@ -14,6 +16,7 @@ watchdog_last_activity = time.time()
 def watchdog_key_listener():
     """Listens for the configured key combination and resets the timer when detected."""
     global watchdog_last_activity
+    logger.debug("Adding watch for key combo {}", WATCHDOG_KEY_COMBO)
     keyboard.add_hotkey(WATCHDOG_KEY_COMBO, watchdog_reset_timer)
     keyboard.wait()  # Keeps the program running
 
@@ -36,7 +39,9 @@ def watchdog_alert_checker():
 watchdog_listener_thread = threading.Thread(target=watchdog_key_listener, daemon=True)
 watchdog_alert_thread = threading.Thread(target=watchdog_alert_checker, daemon=True)
 
+logger.debug("Running listener thread.")
 watchdog_listener_thread.start()
+logger.debug("Running alert thread.")
 watchdog_alert_thread.start()
 
 # Keep the main thread alive
