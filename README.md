@@ -14,11 +14,5 @@ before and frankly I don't give a rat's posterior.
 
 ## Current Status
 
-Broken. Currently blows up with the following deep in its C code dependencies on
-Mac:
-```
-╭─cpatti at rocinante in ~/src/personal/python/watchdog on main✘✘✘ 25-03-04 - 11:56:48
-╰─(.venv) ⠠⠵ python watchdog.py                                                      <region:us-east-1>
-Assertion failed: (range.location <= dataLength), function __CFDataValidateRange, file CFData.c, line 219.
-[1]    27867 abort      python watchdog.py
-```
+Works great on MacOS Sequoia current. Will test on Windows and Linux later
+tonight :)

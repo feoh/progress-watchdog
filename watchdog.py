@@ -1,24 +1,32 @@
-import keyboard
 import time
 import threading
+import platform
+import os
 from playsound import playsound
-from loguru import logger
-
+from pynput import keyboard
 
 # CONFIGURABLE SETTINGS
-WATCHDOG_KEY_COMBO = "ctrl+alt+k"  # Change this to the desired key combination
+WATCHDOG_KEY_COMBO = {keyboard.Key.ctrl_l, keyboard.Key.alt_l, keyboard.KeyCode(char="k")}
 WATCHDOG_TIMEOUT = 10  # Time in seconds before the notification sound plays
-WATCHDOG_ALERT_SOUND = "./buzzer-or-wrong-answer-20582.mp3"  # Provide a valid sound file path
+WATCHDOG_ALERT_SOUND = "buzzer-or-wrong-answer-20582.mp3"  # Provide a valid sound file path
 
 # Shared variable to track the last key press time
 watchdog_last_activity = time.time()
 
-def watchdog_key_listener():
-    """Listens for the configured key combination and resets the timer when detected."""
-    global watchdog_last_activity
-    logger.debug("Adding watch for key combo {}", WATCHDOG_KEY_COMBO)
-    keyboard.add_hotkey(WATCHDOG_KEY_COMBO, watchdog_reset_timer)
-    keyboard.wait()  # Keeps the program running
+# Variable to track currently pressed keys
+pressed_keys = set()
+
+def on_press(key):
+    """Tracks key presses and detects if the key combo is activated."""
+    global watchdog_last_activity, pressed_keys
+    pressed_keys.add(key)
+    if WATCHDOG_KEY_COMBO.issubset(pressed_keys):
+        watchdog_reset_timer()
+
+def on_release(key):
+    """Removes keys from the pressed set when released."""
+    if key in pressed_keys:
+        pressed_keys.remove(key)
 
 def watchdog_reset_timer():
     """Resets the inactivity timer when the key combination is detected."""
@@ -26,25 +34,31 @@ def watchdog_reset_timer():
     watchdog_last_activity = time.time()
     print("Watchdog: Key combination detected! Timer reset.")
 
+def watchdog_play_sound():
+    """Plays a notification sound based on the operating system."""
+    if platform.system() == "Darwin":  # macOS
+        os.system(f"afplay {WATCHDOG_ALERT_SOUND}")  # macOS built-in player
+    else:
+        playsound(WATCHDOG_ALERT_SOUND)
+
 def watchdog_alert_checker():
     """Continuously checks for inactivity and plays an alert if timeout is exceeded."""
+    global watchdog_last_activity  # Fix: Explicitly declare global variable
     while True:
         time.sleep(1)  # Check every second
         if time.time() - watchdog_last_activity >= WATCHDOG_TIMEOUT:
             print("Watchdog: Inactivity timeout exceeded! Playing notification sound...")
-            playsound(WATCHDOG_ALERT_SOUND)
+            watchdog_play_sound()
             watchdog_last_activity = time.time()  # Reset timer after alert
 
-# Run both listener and checker in separate threads
-watchdog_listener_thread = threading.Thread(target=watchdog_key_listener, daemon=True)
-watchdog_alert_thread = threading.Thread(target=watchdog_alert_checker, daemon=True)
+# Set up key listener
+watchdog_listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+watchdog_listener.start()
 
-logger.debug("Running listener thread.")
-watchdog_listener_thread.start()
-logger.debug("Running alert thread.")
+# Run alert checker in a separate thread
+watchdog_alert_thread = threading.Thread(target=watchdog_alert_checker, daemon=True)
 watchdog_alert_thread.start()
 
 # Keep the main thread alive
-while True:
-    time.sleep(10)
+watchdog_listener.join()
 
