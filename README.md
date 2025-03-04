@@ -16,3 +16,9 @@ before and frankly I don't give a rat's posterior.
 
 Works great on MacOS Sequoia current. Will test on Windows and Linux later
 tonight :)
+
+## TODO
+
+- Implement some cleaner way to exit than Ctrl-c with an exception :)
+- Make configurables into args or a configuration file or something.
+- Make the "I made Progress!" key chord not insert characters into the buffer.
