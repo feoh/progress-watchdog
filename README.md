@@ -1,6 +1,7 @@
-<p class="attribution">"<a rel="noopener noreferrer" href="https://www.rawpixel.com/image/6482398/png-sticker-public-domain">Cartoon Bulldog png sticker, animal</a>" is marked with <a rel="noopener noreferrer" href="https://creativecommons.org/publicdomain/zero/1.0/?ref=openverse">CC0 1.0 <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="height: 1em; margin-right: 0.125em; display: inline;" /><img src="https://mirrors.creativecommons.org/presskit/icons/zero.svg" style="height: 1em; margin-right: 0.125em; display: inline;" /></a>.</p>
-
 # Watchdog
+
+![Cartoon Bulldog - CC
+https://openverse.org/image/aedd8c62-ff3c-4365-9af1-147c1973440f?q=cartoon+bulldog&p=3](CartoonBulldog.png)
 
 Watchdog: A program to help avoid analysis paralysis and time dilation due to tunnel vision.
 
