@@ -1,13 +1,12 @@
 [project]
 name = "progress-watchdog"
-version = "0.1.0"
+dynamic = ["version"]
 authors = [
-  { name="Chris Patti", email="feoh@feoh.org" },
+    { name="Chris Patti", email="feoh@feoh.org" },
 ]
 description = "Progress Watchdog is a Python package that helps you avoid staying stuck or getting tunnel vision while time flows by."
 readme = "README.md"
-license-files = ["LICENSE"]
-license = {text = "MIT License"}
+license = {text="MIT"}
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
