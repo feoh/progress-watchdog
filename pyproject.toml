@@ -1,7 +1,7 @@
 [project]
-name = "watchdog"
+name = "progress-watchdog"
 version = "0.1.0"
-description = "Add your description here"
+description = "Progress Watchdog is a Python package that helps you avoid staying stuck or getting tunnel vision while time flows by."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

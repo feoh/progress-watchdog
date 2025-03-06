@@ -1,9 +1,9 @@
-# Watchdog
+# Progress Watchdog
 
 ![Cartoon Bulldog - CC
 https://openverse.org/image/aedd8c62-ff3c-4365-9af1-147c1973440f?q=cartoon+bulldog&p=3](CartoonBulldog.png)
 
-Watchdog: A program to help avoid analysis paralysis and time dilation due to tunnel vision.
+Progress Watchdog: A program to help avoid analysis paralysis and time dilation due to tunnel vision.
 
 ## External Resources
 
