@@ -17,8 +17,14 @@ before and frankly I don't give a rat's posterior.
 
 ## Current Status
 
-Works great on MacOS Sequoia current. Will test on Windows and Linux later
-tonight :)
+### What works, what doesn't.
+Mac works great (tested on Sequoia.latest) - Windows works pretty well, though
+the mechanism to detect hotkey presses needs more testing. Linux isn't working
+yet. Natch :)
+
+### Installation via uv
+
+Right now you can check the project out from github and run `uv run watchdog.py`
 
 ## TODO
 
