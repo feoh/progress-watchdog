@@ -4,6 +4,10 @@ import platform
 import os
 from playsound import playsound
 from pynput import keyboard
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
 
 # CONFIGURABLE SETTINGS
 WATCHDOG_KEY_COMBO = {keyboard.Key.ctrl_l, keyboard.Key.alt_l, keyboard.KeyCode(char="]")}
@@ -20,6 +24,10 @@ def on_press(key):
     """Tracks key presses and detects if the key combo is activated."""
     global watchdog_last_activity, pressed_keys
     pressed_keys.add(key)
+    logger = logging.getLogger(__name__)
+    logger.debug(f"Key pressed: {key}")  # Debugging log
+
+
     if WATCHDOG_KEY_COMBO.issubset(pressed_keys):
         watchdog_reset_timer()
 
@@ -27,6 +35,9 @@ def on_release(key):
     """Removes keys from the pressed set when released."""
     if key in pressed_keys:
         pressed_keys.remove(key)
+
+    logger = logging.getLogger(__name__)
+    logger.debug(f"Key released: {key}")  # Debugging log
 
 def watchdog_reset_timer():
     """Resets the inactivity timer when the key combination is detected."""
