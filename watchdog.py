@@ -1,3 +1,10 @@
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "playsound",
+#     "pynput",
+# ]
+# ///
 import time
 import threading
 import platform
