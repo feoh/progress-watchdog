@@ -5,6 +5,8 @@
 #     "pynput",
 # ]
 # ///
+import importlib.resources
+
 import time
 import threading
 import platform
@@ -19,7 +21,6 @@ logging.basicConfig(level=logging.INFO)
 # CONFIGURABLE SETTINGS
 WATCHDOG_KEY_COMBO = {keyboard.Key.ctrl_l, keyboard.Key.alt_l, keyboard.KeyCode(char="]")}
 WATCHDOG_TIMEOUT = 60 * 15  # Time in seconds before the notification sound plays
-WATCHDOG_ALERT_SOUND = "buzzer-or-wrong-answer-20582.mp3"  # Provide a valid sound file path
 
 # Shared variable to track the last key press time
 watchdog_last_activity = time.time()
@@ -54,10 +55,11 @@ def watchdog_reset_timer():
 
 def watchdog_play_sound():
     """Plays a notification sound based on the operating system."""
+    sound_file = get_sound_file()
     if platform.system() == "Darwin":  # macOS
-        os.system(f"afplay {WATCHDOG_ALERT_SOUND}")  # macOS built-in player
+        os.system(f"afplay {sound_file}")  # macOS built-in player
     else:
-        playsound(WATCHDOG_ALERT_SOUND)
+        playsound(sound_file)
 
 def watchdog_alert_checker():
     """Continuously checks for inactivity and plays an alert if timeout is exceeded."""
@@ -68,6 +70,9 @@ def watchdog_alert_checker():
             print("Watchdog: Inactivity timeout exceeded! Playing notification sound...")
             watchdog_play_sound()
             watchdog_last_activity = time.time()  # Reset timer after alert
+    
+def get_sound_file():
+    return str(importlib.resources.files("progress_watchdog") / "buzzer-or-wrong-answer-20582.mp3")
 
 def main():
     print("Welcome to progress watchdog! Starting!")
@@ -75,7 +80,7 @@ def main():
     print("Current Settings:")
     print(f"No Progress Timeout(Seconds): {WATCHDOG_TIMEOUT}")
     print(f"Made Progress Key Combo: {WATCHDOG_KEY_COMBO}")
-    print(f"No Progress Alert Klaxxon: {WATCHDOG_ALERT_SOUND}")
+    print(f"No Progress Alert Klaxxon: {get_sound_file()}")
     # Set up key listener
     watchdog_listener = keyboard.Listener(on_press=on_press, on_release=on_release)
     watchdog_listener.start()
