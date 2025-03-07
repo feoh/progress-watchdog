@@ -1,6 +1,6 @@
 [project]
 name = "progress-watchdog"
-version = "0.1.0"
+version = "0.1.1"
 description = "Progress Watchdog is a Python package that helps you avoid staying stuck or getting tunnel vision while time flows by."
 readme = "README.md"
 authors = [

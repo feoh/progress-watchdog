@@ -70,6 +70,12 @@ def watchdog_alert_checker():
             watchdog_last_activity = time.time()  # Reset timer after alert
 
 def main():
+    print("Welcome to progress watchdog! Starting!")
+    print("=======================================\n\n")
+    print("Current Settings:")
+    print(f"No Progress Timeout(Seconds): {WATCHDOG_TIMEOUT}")
+    print(f"Made Progress Key Combo: {WATCHDOG_KEY_COMBO}")
+    print(f"No Progress Alert Klaxxon: {WATCHDOG_ALERT_SOUND}")
     # Set up key listener
     watchdog_listener = keyboard.Listener(on_press=on_press, on_release=on_release)
     watchdog_listener.start()

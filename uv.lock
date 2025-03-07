@@ -15,7 +15,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/67/8c/c9f46b4b194126c4a
 
 [[package]]
 name = "progress-watchdog"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "playsound" },
