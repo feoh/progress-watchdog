@@ -69,14 +69,15 @@ def watchdog_alert_checker():
             watchdog_play_sound()
             watchdog_last_activity = time.time()  # Reset timer after alert
 
-# Set up key listener
-watchdog_listener = keyboard.Listener(on_press=on_press, on_release=on_release)
-watchdog_listener.start()
+def main():
+    # Set up key listener
+    watchdog_listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+    watchdog_listener.start()
 
-# Run alert checker in a separate thread
-watchdog_alert_thread = threading.Thread(target=watchdog_alert_checker, daemon=True)
-watchdog_alert_thread.start()
+    # Run alert checker in a separate thread
+    watchdog_alert_thread = threading.Thread(target=watchdog_alert_checker, daemon=True)
+    watchdog_alert_thread.start()
 
-# Keep the main thread alive
-watchdog_listener.join()
+    # Keep the main thread alive
+    watchdog_listener.join()
 
