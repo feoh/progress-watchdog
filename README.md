@@ -24,7 +24,34 @@ yet. Natch :)
 
 ### Installation via uv
 
-Right now you can check the project out from github and run `uv run watchdog.py`
+Right now you can check the project out from github and run `uv run
+progress-watchdog'
+
+If you want to run the program without installing, you can use uv for that as
+well:
+
+```
+╭─cpatti at rocinante in ~ 25-03-09 - 21:06:30
+╰─○ uv tool run progress-watchdog                                                    <region:us-east-1>
+usage: progress-watchdog [-h] --buzzer BUZZER [--timeout TIMEOUT]
+progress-watchdog: error: the following arguments are required: --buzzer
+╭─cpatti at rocinante in ~ 25-03-09 - 21:06:36
+╰─○ uv tool run progress-watchdog --help                                             <region:us-east-1>
+usage: progress-watchdog [-h] --buzzer BUZZER [--timeout TIMEOUT]
+
+options:
+  -h, --help         show this help message and exit
+  --buzzer BUZZER    Filename for the alert sound to play when no progress is detected
+  --timeout TIMEOUT  Number of seconds to wait before alerting that no progress was detected.
+╭─cpatti at rocinante in ~ 25-03-09 - 21:06:54
+╰─○                                                                                  <region:us-east-1>
+
+```
+
+You'll also need to provide an MP3 file that the program will play to shock
+you out of your tunnel vision :)
+
+I used [this one](https://pixabay.com/sound-effects/buzzer-or-wrong-answer-20582/) but you can choose any you like!
 
 ## TODO
 
