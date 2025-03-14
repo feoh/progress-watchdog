@@ -1,6 +1,6 @@
 [project]
 name = "progress-watchdog"
-version = "0.1.4"
+version = "0.1.5"
 description = "Progress Watchdog is a Python package that helps you avoid staying stuck or getting tunnel vision while time flows by."
 readme = "README.md"
 authors = [
@@ -23,3 +23,10 @@ progress-watchdog = "progress_watchdog:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["progress_watchdog"]
+
+[tool.setuptools.package-data]
+my_sound_package = ["sounds/*.mp3", "sounds/*.wav"]

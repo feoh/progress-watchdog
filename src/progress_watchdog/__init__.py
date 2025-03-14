@@ -9,6 +9,7 @@ import time
 import threading
 import platform
 import os
+from importlib.resources import files, as_file
 from playsound import playsound
 from pynput import keyboard
 import argparse
@@ -20,7 +21,7 @@ logging.basicConfig(level=logging.INFO)
 # Note: watchdog_key_combo is defined below in on_press for now :\
 class Configurables():
     watchdog_timeout = 60 * 15  # Time in seconds before the notification sound plays
-    watchdog_alert_sound: str|None = None
+    watchdog_alert_sound: str = "" 
 
 # Shared variable to track the last key press time
 watchdog_last_activity = time.time()
@@ -58,9 +59,10 @@ def watchdog_reset_timer():
 def watchdog_play_sound(configs: Configurables):
     """Plays a notification sound based on the operating system."""
     if platform.system() == "Darwin":  # macOS
-        os.system(f"afplay {configs.watchdog_alert_sound}")  # macOS built-in player
+        os.system(f"afplay {configs.watchdog_alert_sound}")  # macOS built
     else:
         playsound(configs.watchdog_alert_sound)
+ 
 
 def watchdog_alert_checker(configs: Configurables):
     """Continuously checks for inactivity and plays an alert if timeout is exceeded."""
@@ -74,12 +76,19 @@ def watchdog_alert_checker(configs: Configurables):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--buzzer", help="Filename for the alert sound to play when no progress is detected", required=True)
+    parser.add_argument("--buzzer", help="Filename for the alert sound to play when no progress is detected")
     parser.add_argument("--timeout", help="Number of seconds to wait before alerting that no progress was detected.")
     args = parser.parse_args()
 
     configs = Configurables()
-    configs.watchdog_alert_sound = args.buzzer
+    if args.buzzer:
+        configs.watchdog_alert_sound = args.buzzer
+    else:
+        source = files("progress_watchdog.sounds").joinpath("buzzer-or-wrong-answer-20582.mp3")
+        with as_file(source) as sound_path:
+            configs.watchdog_alert_sound = str(sound_path)
+        print(f"{configs.watchdog_alert_sound=}")
+
     if args.timeout:
         configs.watchdog_timeout = int(args.timeout)
 
