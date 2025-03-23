@@ -15,17 +15,12 @@ haters please send your complaints, religious treatises, and assertions about
 the implications this has on my character to /dev/null. I've heard them all
 before and frankly I don't give a rat's posterior.
 
-## Current Status
-
-### What works, what doesn't.
-Mac works great (tested on Sequoia.latest) - Windows works pretty well, though
-the mechanism to detect hotkey presses needs more testing. Linux isn't working
-yet. Natch :)
-
 ### Installation via uv
 
-Right now you can check the project out from github and run `uv run
-progress-watchdog'
+Right now you can check the project out from github and run:
+```
+uv run progress-watchdog
+```
 
 If you want to run the program without installing, you can use uv for that as
 well:
@@ -48,10 +43,6 @@ options:
 
 ```
 
-You'll also need to provide an MP3 file that the program will play to shock
-you out of your tunnel vision :)
-
-I used [this one](https://pixabay.com/sound-effects/buzzer-or-wrong-answer-20582/) but you can choose any you like!
 
 ## TODO
 
