@@ -23,8 +23,11 @@ class Configurables():
     watchdog_timeout = 60 * 15  # Time in seconds before the notification sound plays
     watchdog_alert_sound: str = "" 
 
-# Shared variable to track the last key press time
-watchdog_last_activity = time.time()
+# Global variable to track the timer for inactivity alerts
+alert_timer: threading.Timer | None = None
+
+# Global variable to hold the current configuration
+configs: Configurables | None = None
 
 # Variable to track currently pressed keys
 pressed_keys = set()
@@ -33,11 +36,10 @@ def on_press(key):
     """Tracks key presses and detects if the key combo is activated."""
     # Change this if you want a different "I made progress" key!
     watchdog_key_combo = {keyboard.Key.ctrl_l, keyboard.Key.alt_l, keyboard.KeyCode(char="]")}
-    global watchdog_last_activity, pressed_keys
+    global pressed_keys, alert_timer, configs
     pressed_keys.add(key)
     logger = logging.getLogger(__name__)
     logger.debug(f"Key pressed: {key}")  # Debugging log
-
 
     if watchdog_key_combo.issubset(pressed_keys):
         watchdog_reset_timer()
@@ -52,8 +54,12 @@ def on_release(key):
 
 def watchdog_reset_timer():
     """Resets the inactivity timer when the key combination is detected."""
-    global watchdog_last_activity
-    watchdog_last_activity = time.time()
+    global alert_timer, configs
+    if alert_timer:
+        alert_timer.cancel()
+    # Schedule a new timer that will trigger after the configured timeout
+    alert_timer = threading.Timer(configs.watchdog_timeout, watchdog_play_sound, args=[configs])
+    alert_timer.start()
     print("Watchdog: Key combination detected! Timer reset.")
 
 def watchdog_play_sound(configs: Configurables):
@@ -62,17 +68,6 @@ def watchdog_play_sound(configs: Configurables):
         os.system(f"afplay {configs.watchdog_alert_sound}")  # macOS built
     else:
         playsound(configs.watchdog_alert_sound)
- 
-
-def watchdog_alert_checker(configs: Configurables):
-    """Continuously checks for inactivity and plays an alert if timeout is exceeded."""
-    global watchdog_last_activity  # Fix: Explicitly declare global variable
-    while True:
-        time.sleep(1)  # Check every second
-        if time.time() - watchdog_last_activity >= configs.watchdog_timeout:
-            print("Watchdog: Inactivity timeout exceeded! Playing notification sound...")
-            watchdog_play_sound(configs)
-            watchdog_last_activity = time.time()  # Reset timer after alert
 
 def main():
     parser = argparse.ArgumentParser()
@@ -80,6 +75,7 @@ def main():
     parser.add_argument("--timeout", help="Number of seconds to wait before alerting that no progress was detected.")
     args = parser.parse_args()
 
+    global configs
     configs = Configurables()
     if args.buzzer:
         configs.watchdog_alert_sound = args.buzzer
@@ -93,19 +89,21 @@ def main():
         configs.watchdog_timeout = int(args.timeout)
 
     print("Welcome to progress watchdog! Starting!")
-    print("=======================================\n\n")
+    print("================================================\n\n")
     print("Current Settings:")
     print(f"No Progress Timeout(Seconds): {configs.watchdog_timeout}")
     print("Made Progress Key Combo: Ctrl+Alt+]")
     print(f"No Progress Alert Klaxxon: {configs.watchdog_alert_sound}")
+
     # Set up key listener
     watchdog_listener = keyboard.Listener(on_press=on_press, on_release=on_release)
     watchdog_listener.start()
 
-    # Run alert checker in a separate thread
-    watchdog_alert_thread = threading.Thread(target=watchdog_alert_checker, args=[configs], daemon=True)
-    watchdog_alert_thread.start()
+    # Start the initial inactivity timer
+    watchdog_reset_timer()
 
     # Keep the main thread alive
     watchdog_listener.join()
 
+if __name__ == "__main__":
+    main()
