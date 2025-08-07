@@ -30,15 +30,17 @@ pressed_keys = set()
 
 def on_press(key):
     """Tracks key presses and detects if the key combo is activated."""
-    # Change this if you want a different "I made progress" key!
-    watchdog_key_combo = {keyboard.Key.ctrl_l, keyboard.Key.alt_l, keyboard.KeyCode(char="]")}
     global watchdog_last_activity, pressed_keys
     pressed_keys.add(key)
     logger = logging.getLogger(__name__)
     logger.debug(f"Key pressed: {key}")  # Debugging log
 
+    # Check if we have Ctrl+Alt+] combination (accepting left/right modifiers)
+    has_ctrl = keyboard.Key.ctrl_l in pressed_keys or keyboard.Key.ctrl_r in pressed_keys
+    has_alt = keyboard.Key.alt_l in pressed_keys or keyboard.Key.alt_r in pressed_keys
+    has_bracket = keyboard.KeyCode(char="]") in pressed_keys
 
-    if watchdog_key_combo.issubset(pressed_keys):
+    if has_ctrl and has_alt and has_bracket:
         watchdog_reset_timer()
 
 def on_release(key):

@@ -8,21 +8,16 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
-    "playsound>=1.3.0",
+    "playsound",
     "pynput>=1.8.0",
 ]
 license = "MIT"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-]
 [project.scripts]
 progress-watchdog = "progress_watchdog:main"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build>=0.8.5,<0.9.0"]
+build-backend = "uv_build"
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -30,3 +25,6 @@ include = ["progress_watchdog"]
 
 [tool.setuptools.package-data]
 my_sound_package = ["sounds/*.mp3", "sounds/*.wav"]
+
+[tool.uv.sources]
+playsound = { git = "ssh://git@github.com/taconi/playsound.git" }
