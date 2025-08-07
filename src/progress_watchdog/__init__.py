@@ -6,7 +6,6 @@
 # ]
 # ///
 import time
-import threading
 import platform
 import os
 from importlib.resources import files, as_file
@@ -64,15 +63,13 @@ def watchdog_play_sound(configs: Configurables):
         playsound(configs.watchdog_alert_sound)
  
 
-def watchdog_alert_checker(configs: Configurables):
-    """Continuously checks for inactivity and plays an alert if timeout is exceeded."""
-    global watchdog_last_activity  # Fix: Explicitly declare global variable
-    while True:
-        time.sleep(1)  # Check every second
-        if time.time() - watchdog_last_activity >= configs.watchdog_timeout:
-            print("Watchdog: Inactivity timeout exceeded! Playing notification sound...")
-            watchdog_play_sound(configs)
-            watchdog_last_activity = time.time()  # Reset timer after alert
+def check_inactivity_timeout(configs: Configurables):
+    """Checks for inactivity and plays an alert if timeout is exceeded."""
+    global watchdog_last_activity
+    if time.time() - watchdog_last_activity >= configs.watchdog_timeout:
+        print("Watchdog: Inactivity timeout exceeded! Playing notification sound...")
+        watchdog_play_sound(configs)
+        watchdog_last_activity = time.time()  # Reset timer after alert
 
 def main():
     parser = argparse.ArgumentParser()
@@ -98,14 +95,18 @@ def main():
     print(f"No Progress Timeout(Seconds): {configs.watchdog_timeout}")
     print("Made Progress Key Combo: Ctrl+Alt+]")
     print(f"No Progress Alert Klaxxon: {configs.watchdog_alert_sound}")
+    
     # Set up key listener
     watchdog_listener = keyboard.Listener(on_press=on_press, on_release=on_release)
     watchdog_listener.start()
 
-    # Run alert checker in a separate thread
-    watchdog_alert_thread = threading.Thread(target=watchdog_alert_checker, args=[configs], daemon=True)
-    watchdog_alert_thread.start()
-
-    # Keep the main thread alive
-    watchdog_listener.join()
+    # Main loop that checks for inactivity timeout periodically
+    try:
+        while True:
+            time.sleep(1)  # Check every second
+            check_inactivity_timeout(configs)
+    except KeyboardInterrupt:
+        print("\nShutting down progress watchdog...")
+    finally:
+        watchdog_listener.stop()
 
